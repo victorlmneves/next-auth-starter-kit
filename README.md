@@ -13,7 +13,7 @@ A production-ready SaaS starter kit built with **Next.js 16**, **NextAuth.js v5*
 - **Authentication Ready** — Pre-built login, register, and password reset flows using NextAuth.js v5 + Auth0
 - **Refresh Tokens** — Automatic token refresh with error handling (mirrors the Nuxt kit's behavior)
 - **TypeScript First** — Strict TypeScript with full type safety, including typed session data
-- **Next.js 15 + App Router** — Server Components, Server Actions, Turbopack
+- **Next.js 16 + App Router** — Server Components, Server Actions, Turbopack
 - **Tailwind CSS v4** — Modern utility-first styling with dark mode support
 - **Internationalization** — Built-in i18n with `next-intl` (EN, PT, ES, FR, DE)
 - **Dark Mode** — Automatic theme switching respecting system preferences
@@ -26,15 +26,17 @@ A production-ready SaaS starter kit built with **Next.js 16**, **NextAuth.js v5*
 ```
 ├── src/
 │   ├── app/
-│   │   ├── (auth)/              # Auth pages (login, register, forgot-password)
-│   │   ├── (protected)/         # Protected pages (dashboard, profile, settings)
+│   │   ├── [locale]/            # Locale segment (required by next-intl v4)
+│   │   │   ├── (auth)/          # Auth pages (login, register, forgot-password)
+│   │   │   ├── (protected)/     # Protected pages (dashboard, profile, settings)
+│   │   │   ├── layout.tsx       # Locale layout (providers: intl, theme, session)
+│   │   │   └── page.tsx         # Home/landing page
 │   │   ├── api/
 │   │   │   └── auth/            # NextAuth.js API routes
-│   │   ├── layout.tsx           # Root layout
-│   │   ├── page.tsx             # Home/landing page
+│   │   ├── layout.tsx           # Root layout (html/body shell)
 │   │   └── globals.css          # Global styles
 │   ├── auth.ts                  # NextAuth configuration (Auth0 + refresh tokens)
-│   ├── middleware.ts            # Route protection + i18n
+│   ├── proxy.ts                 # Route protection + i18n (Next.js 16 proxy convention)
 │   ├── components/
 │   │   ├── auth/                # Auth forms (login, register, forgot-password)
 │   │   ├── layout/              # Header, Sidebar
@@ -154,7 +156,7 @@ npm run test:e2e:ui
 | ---------------------- | --------------------------- |
 | `@sidebase/nuxt-auth`  | `next-auth` v5              |
 | `Auth0` provider       | Auth0 provider (same)       |
-| Nuxt middleware        | Next.js middleware          |
+| Nuxt middleware        | Next.js proxy (`proxy.ts`)  |
 | `useAuthentication.ts` | `useAuthentication.ts` hook |
 | Pinia store            | Zustand store               |
 | `@nuxt/content`        | MDX / content directory     |
