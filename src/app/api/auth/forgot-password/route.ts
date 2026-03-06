@@ -10,16 +10,20 @@ export async function POST(request: NextRequest) {
         const body = await request.json()
         const { email } = forgotPasswordSchema.parse(body)
 
-        // In a real app, you would:
-        // 1. Check if user exists in your database
-        // 2. Generate a secure reset token
-        // 3. Save the token with expiry to your database
-        // 4. Send an email with the reset link
+        const domain = process.env.AUTH_AUTH0_ISSUER?.replace(/\/$/, '')
+        const clientId = process.env.AUTH_AUTH0_ID
 
-        // For Auth0, you can use the Management API:
-        // await auth0ManagementClient.users.changePassword({ email, connection: 'Username-Password-Authentication' })
+        if (!domain || !clientId) {
+            throw new Error('Auth0 configuration missing')
+        }
 
-        console.log(`Password reset requested for: ${email}`)
+        const connection = process.env.AUTH0_CONNECTION ?? 'Username-Password-Authentication'
+
+        await fetch(`${domain}/dbconnections/change_password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ client_id: clientId, email, connection }),
+        })
 
         // Always return success to prevent email enumeration attacks
         return NextResponse.json(
