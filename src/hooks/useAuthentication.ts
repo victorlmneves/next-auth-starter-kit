@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import type { AuthSession, AuthUser } from '@/types'
@@ -43,14 +43,11 @@ export function useAuthentication() {
         }
     }
 
-    const logout = async (callbackUrl = '/') => {
-        try {
-            await signOut({ callbackUrl, redirect: true })
-            toast.success('You have been signed out')
-        } catch (error) {
-            console.error('Logout error:', error)
-            toast.error('An unexpected error occurred')
-        }
+    const logout = () => {
+        // Navigate to the federated logout endpoint which clears all auth
+        // cookies (including CSRF token) and redirects to Auth0 /v2/logout
+        // so the Auth0 session is also cleared.
+        window.location.href = '/api/auth/federated-logout'
     }
 
     const refreshSession = async () => {

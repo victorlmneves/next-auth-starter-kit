@@ -22,6 +22,7 @@ declare module 'next-auth' {
 
     interface JWT {
         accessToken?: string
+        idToken?: string
         refreshToken?: string
         accessTokenExpires?: number
         error?: string
@@ -108,6 +109,7 @@ export const authConfig: NextAuthConfig = {
                 return {
                     ...token,
                     accessToken: account.access_token,
+                    idToken: account.id_token,
                     refreshToken: account.refresh_token,
                     accessTokenExpires: account.expires_at ? account.expires_at * 1000 : Date.now() + 3600000,
                     user,
@@ -155,6 +157,7 @@ export const authConfig: NextAuthConfig = {
 
             return true
         },
+
     },
 
     session: {

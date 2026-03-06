@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { Moon, Sun, Menu, X, User, Settings, LogOut, LayoutDashboard } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
@@ -118,7 +118,7 @@ export function Header() {
                                         </Link>
                                         <div className="mt-1 border-t pt-1">
                                             <button
-                                                onClick={() => signOut({ callbackUrl: '/' })}
+                                                onClick={() => { window.location.href = '/api/auth/federated-logout' }}
                                                 className="text-destructive hover:bg-destructive/10 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors"
                                             >
                                                 <LogOut className="h-4 w-4" />
