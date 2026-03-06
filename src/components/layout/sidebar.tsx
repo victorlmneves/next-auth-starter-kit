@@ -1,0 +1,106 @@
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { LayoutDashboard, User, Settings, FileText, BarChart3, Bell, HelpCircle, LogOut } from 'lucide-react'
+import { signOut } from 'next-auth/react'
+import { cn } from '@/lib/utils'
+
+const sidebarItems = [
+    {
+        title: 'Main',
+        items: [
+            { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+            { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
+            { href: '/dashboard/notifications', label: 'Notifications', icon: Bell, badge: '3' },
+            { href: '/dashboard/documents', label: 'Documents', icon: FileText },
+        ],
+    },
+    {
+        title: 'Account',
+        items: [
+            { href: '/profile', label: 'Profile', icon: User },
+            { href: '/settings', label: 'Settings', icon: Settings },
+        ],
+    },
+    {
+        title: 'Support',
+        items: [{ href: '/docs', label: 'Documentation', icon: HelpCircle }],
+    },
+]
+
+export function Sidebar() {
+    const pathname = usePathname()
+
+    return (
+        <aside className="bg-background flex h-full w-64 flex-col border-r">
+            {/* Logo */}
+            <div className="flex h-16 items-center border-b px-6">
+                <Link href="/" className="flex items-center gap-2 font-bold">
+                    <div className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-lg text-sm font-black">
+                        N
+                    </div>
+                    Auth Starter
+                </Link>
+            </div>
+
+            {/* Navigation */}
+            <nav className="flex-1 overflow-y-auto px-3 py-4">
+                {sidebarItems.map((section) => (
+                    <div key={section.title} className="mb-4">
+                        <p className="text-muted-foreground mb-1 px-3 text-xs font-semibold tracking-wider uppercase">
+                            {section.title}
+                        </p>
+                        <ul className="space-y-1">
+                            {section.items.map((item) => {
+                                const Icon = item.icon
+                                const isActive =
+                                    pathname === item.href || pathname.startsWith(item.href + '/')
+
+                                return (
+                                    <li key={item.href}>
+                                        <Link
+                                            href={item.href}
+                                            className={cn(
+                                                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                                                isActive
+                                                    ? 'bg-primary text-primary-foreground'
+                                                    : 'text-muted-foreground hover:bg-accent hover:text-foreground',
+                                            )}
+                                        >
+                                            <Icon className="h-4 w-4 shrink-0" />
+                                            <span className="flex-1">{item.label}</span>
+                                            {item.badge && (
+                                                <span
+                                                    className={cn(
+                                                        'flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-medium',
+                                                        isActive
+                                                            ? 'bg-primary-foreground/20 text-primary-foreground'
+                                                            : 'bg-primary/10 text-primary',
+                                                    )}
+                                                >
+                                                    {item.badge}
+                                                </span>
+                                            )}
+                                        </Link>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    </div>
+                ))}
+            </nav>
+
+            {/* Sign Out */}
+            <div className="border-t p-3">
+                <button
+                    onClick={() => signOut({ callbackUrl: '/' })}
+                    className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+                >
+                    <LogOut className="h-4 w-4 shrink-0" />
+                    Sign Out
+                </button>
+            </div>
+        </aside>
+    )
+}
