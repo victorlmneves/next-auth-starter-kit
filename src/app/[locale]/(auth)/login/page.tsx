@@ -7,5 +7,9 @@ export const metadata: Metadata = {
 }
 
 export default function LoginPage() {
-    return <LoginForm />
+    // Read feature flags server-side — more reliable than process.env in client components
+    const enableGithub = process.env.NEXT_PUBLIC_ENABLE_GITHUB_AUTH === 'true'
+    const enableGoogle = process.env.NEXT_PUBLIC_ENABLE_GOOGLE_AUTH === 'true'
+
+    return <LoginForm enableGithub={enableGithub} enableGoogle={enableGoogle} />
 }

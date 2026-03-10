@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LayoutDashboard, User, Settings, FileText, BarChart3, Bell, HelpCircle, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useAuthentication } from '@/hooks/useAuthentication'
 
 const sidebarItems = [
     {
@@ -30,6 +31,7 @@ const sidebarItems = [
 
 export function Sidebar() {
     const pathname = usePathname()
+    const { logout } = useAuthentication()
 
     return (
         <aside className="bg-background flex h-full w-64 flex-col border-r">
@@ -93,7 +95,7 @@ export function Sidebar() {
             {/* Sign Out */}
             <div className="border-t p-3">
                 <button
-                    onClick={() => { window.location.href = '/api/auth/federated-logout' }}
+                    onClick={logout}
                     className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
                 >
                     <LogOut className="h-4 w-4 shrink-0" />

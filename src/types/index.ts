@@ -13,9 +13,8 @@ export interface AuthUser {
 }
 
 export interface AuthSession extends Session {
-    accessToken?: string
-    refreshToken?: string
-    accessTokenExpires?: number
+    // Tokens are NOT in the client session — use getToken() server-side
+    provider?: string
     error?: 'RefreshAccessTokenError' | string
 }
 

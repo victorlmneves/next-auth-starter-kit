@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useSession } from 'next-auth/react'
+import { useAuthentication } from '@/hooks/useAuthentication'
 import { Moon, Sun, Menu, X, User, Settings, LogOut, LayoutDashboard } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
@@ -17,10 +17,12 @@ const navLinks = [
 ]
 
 export function Header() {
-    const { data: session, status } = useSession()
+    const { session, isLoading: loading, logout } = useAuthentication()
+    const status = loading ? 'loading' : session ? 'authenticated' : 'unauthenticated'
     const { theme, setTheme } = useTheme()
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [userMenuOpen, setUserMenuOpen] = useState(false)
+
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark')
 
@@ -118,7 +120,7 @@ export function Header() {
                                         </Link>
                                         <div className="mt-1 border-t pt-1">
                                             <button
-                                                onClick={() => { window.location.href = '/api/auth/federated-logout' }}
+                                                onClick={logout}
                                                 className="text-destructive hover:bg-destructive/10 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors"
                                             >
                                                 <LogOut className="h-4 w-4" />

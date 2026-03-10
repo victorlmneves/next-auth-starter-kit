@@ -7,9 +7,8 @@ import type { NextAuthConfig } from 'next-auth'
 // Extend the built-in session types
 declare module 'next-auth' {
     interface Session {
-        accessToken?: string
-        refreshToken?: string
-        accessTokenExpires?: number
+        // Tokens are intentionally NOT exposed to the client — accessed server-side via getToken()
+        provider?: string
         error?: string
         user: {
             id: string
@@ -19,10 +18,14 @@ declare module 'next-auth' {
             role?: string
         }
     }
+}
 
+// JWT augmentation must be in 'next-auth/jwt', not 'next-auth'
+declare module 'next-auth/jwt' {
     interface JWT {
         accessToken?: string
-        idToken?: string
+        idToken?: string // kept in JWT (server-only) for Auth0 logout, not exposed to session
+        provider?: string
         refreshToken?: string
         accessTokenExpires?: number
         error?: string
@@ -57,6 +60,8 @@ async function refreshAccessToken(token: Record<string, unknown>) {
             accessToken: refreshedTokens.access_token,
             accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
             refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
+            // Clear any previous error
+            error: undefined,
         }
     } catch (error) {
         console.error('Error refreshing access token:', error)
@@ -75,6 +80,7 @@ export const authConfig: NextAuthConfig = {
                 params: {
                     scope: process.env.AUTH0_SCOPE ?? 'openid profile email offline_access',
                     audience: process.env.AUTH0_AUDIENCE,
+                    prompt: 'signin', // always prompt for credentials'
                 },
             },
         }),
@@ -83,6 +89,15 @@ export const authConfig: NextAuthConfig = {
                   GitHub({
                       clientId: process.env.AUTH_GITHUB_ID,
                       clientSecret: process.env.AUTH_GITHUB_SECRET,
+                      authorization: {
+                          params: {
+                              // GitHub only supports 'code' response_type
+                              // prompt and access_type are Google/Auth0 params — removed
+                              prompt: 'signin',
+                              response_type: 'code',
+                              scope: 'read:user user:email',
+                          },
+                      },
                   }),
               ]
             : []),
@@ -91,6 +106,13 @@ export const authConfig: NextAuthConfig = {
                   Google({
                       clientId: process.env.AUTH_GOOGLE_ID,
                       clientSecret: process.env.AUTH_GOOGLE_SECRET,
+                      authorization: {
+                          params: {
+                              // Request offline access for refresh tokens
+                              access_type: 'offline',
+                              prompt: 'consent',
+                          },
+                      },
                   }),
               ]
             : []),
@@ -109,7 +131,8 @@ export const authConfig: NextAuthConfig = {
                 return {
                     ...token,
                     accessToken: account.access_token,
-                    idToken: account.id_token,
+                    idToken: account.id_token, // stored in JWT only, not forwarded to session
+                    provider: account.provider,
                     refreshToken: account.refresh_token,
                     accessTokenExpires: account.expires_at ? account.expires_at * 1000 : Date.now() + 3600000,
                     user,
@@ -121,16 +144,22 @@ export const authConfig: NextAuthConfig = {
                 return token
             }
 
-            // Token expired, try to refresh
-            return refreshAccessToken(token as Record<string, unknown>)
+            // Token expired — only Auth0 supports refresh tokens here
+            // GitHub and Google tokens are long-lived or handled differently
+            if (token.provider === 'auth0') {
+                return refreshAccessToken(token as Record<string, unknown>)
+            }
+
+            // For GitHub/Google, mark as expired so the client can re-authenticate
+            console.warn(`Access token expired for provider '${token.provider}' — no refresh supported`)
+            return { ...token, error: 'RefreshAccessTokenError' }
         },
 
         async session({ session, token }) {
             return {
                 ...session,
-                accessToken: token.accessToken as string,
-                refreshToken: token.refreshToken as string,
-                accessTokenExpires: token.accessTokenExpires as number,
+                // Tokens intentionally NOT forwarded — sensitive, accessed server-side via getToken()
+                provider: token.provider as string,
                 error: token.error as string,
                 user: {
                     ...session.user,
@@ -148,22 +177,54 @@ export const authConfig: NextAuthConfig = {
             const isProtected = isOnDashboard || isOnProfile || isOnSettings
 
             if (isProtected) {
-                if (isLoggedIn) {
-                    return true
-                }
-
-                return false // Redirect to login
+                return isLoggedIn // Redirects to signIn page if false
             }
 
             return true
         },
 
+        redirect({ url, baseUrl }) {
+            // Allow relative URLs
+            if (url.startsWith('/')) {
+                return `${baseUrl}${url}`
+            }
+
+            // Allow same-origin URLs
+            if (new URL(url).origin === baseUrl) {
+                return url
+            }
+
+            // Allow Auth0 issuer domain — needed so signOut({ redirectTo: auth0LogoutUrl }) works
+            const auth0Domain = process.env.AUTH_AUTH0_ISSUER?.replace(/\/$/, '')
+
+            if (auth0Domain && url.startsWith(auth0Domain)) {
+                return url
+            }
+
+            return baseUrl
+        },
     },
 
     session: {
         strategy: 'jwt',
         maxAge: 30 * 24 * 60 * 60, // 30 days
     },
+
+    cookies: {
+        sessionToken: {
+            name: `next-auth.session-token`,
+            options: {
+                httpOnly: true,
+                sameSite: 'lax',
+                path: '/',
+                secure: process.env.NODE_ENV === 'production',
+            },
+        },
+    },
+
+    secret: process.env.AUTH_SECRET,
+
+    trustHost: true,
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)

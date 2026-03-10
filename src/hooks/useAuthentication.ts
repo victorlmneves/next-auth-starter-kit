@@ -1,20 +1,28 @@
 'use client'
 
-import { useSession, signIn } from 'next-auth/react'
+import { useEffect } from 'react'
+import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { logoutAction } from '@/actions/auth'
 import type { AuthSession, AuthUser } from '@/types'
 
 export function useAuthentication() {
-    const { data: session, status, update } = useSession()
+    const { data: rawSession, status, update } = useSession()
+    const session = rawSession as AuthSession | null
     const router = useRouter()
 
     const isLoading = status === 'loading'
     const isAuthenticated = status === 'authenticated'
     const user = session?.user as AuthUser | undefined
+    const hasTokenError = session?.error === 'RefreshAccessTokenError'
 
-    // Check if token needs refresh
-    const hasTokenError = (session as AuthSession)?.error === 'RefreshAccessTokenError'
+    useEffect(() => {
+        if (hasTokenError) {
+            toast.error('A tua sessão expirou. Por favor, inicia sessão novamente.')
+            signIn()
+        }
+    }, [hasTokenError])
 
     const login = async (provider: string, options?: Record<string, unknown>) => {
         try {
@@ -43,22 +51,67 @@ export function useAuthentication() {
         }
     }
 
-    const logout = () => {
-        // Navigate to the federated logout endpoint which clears all auth
-        // cookies (including CSRF token) and redirects to Auth0 /v2/logout
-        // so the Auth0 session is also cleared.
-        window.location.href = '/api/auth/federated-logout'
-    }
-
-    const refreshSession = async () => {
+    const logout = async () => {
         try {
-            await update()
+            // Revoke federated tokens server-side, get logout URL if provider supports it
+            const { federatedLogoutUrl } = await logoutAction()
+
+            if (federatedLogoutUrl) {
+                // Open a real visible popup — user must interact (e.g. GitHub logout button)
+                const w = 600,
+                    h = 700
+                const left = window.screenX + (window.outerWidth - w) / 2
+                const top = window.screenY + (window.outerHeight - h) / 2
+                const popup = window.open(
+                    federatedLogoutUrl,
+                    'auth-logout',
+                    `width=${w},height=${h},top=${top},left=${left},toolbar=no,menubar=no,scrollbars=yes`,
+                )
+
+                if (!popup) {
+                    // Popup was blocked — fall back to full redirect
+                    await signOut({ redirectTo: '/login' })
+
+                    return
+                }
+
+                // Wait for the user to close the popup, then clear local session
+                await new Promise<void>((resolve) => {
+                    const poll = setInterval(() => {
+                        if (popup.closed) {
+                            clearInterval(poll)
+                            resolve()
+                        }
+                    }, 500)
+                })
+            }
+
+            // Clear local NextAuth session and navigate to login
+            await signOut({ redirect: false })
+            router.push('/login')
         } catch (error) {
-            console.error('Session refresh error:', error)
+            if ((error as { digest?: string })?.digest?.startsWith('NEXT_REDIRECT')) {
+                throw error
+            }
+
+            console.error('Logout error:', error)
+            toast.error('Ocorreu um erro ao terminar sessão')
         }
     }
 
-    const requireAuth = (callbackUrl?: string) => {
+    const refreshSession = async (): Promise<boolean> => {
+        try {
+            await update()
+
+            return true
+        } catch (error) {
+            console.error('Session refresh error:', error)
+
+            return false
+        }
+    }
+
+    const requireAuth = (callbackUrl?: string): boolean => {
         if (!isAuthenticated && !isLoading) {
             const loginUrl = callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login'
             router.push(loginUrl)
@@ -70,7 +123,7 @@ export function useAuthentication() {
     }
 
     return {
-        session: session as AuthSession | null,
+        session,
         user,
         isLoading,
         isAuthenticated,
@@ -79,7 +132,8 @@ export function useAuthentication() {
         logout,
         refreshSession,
         requireAuth,
-        accessToken: (session as AuthSession)?.accessToken,
-        refreshToken: (session as AuthSession)?.refreshToken,
+        // accessToken and refreshToken intentionally NOT exposed here —
+        // tokens should never be accessible to client-side code.
+        // Use server actions or route handlers to make authenticated API calls.
     }
 }

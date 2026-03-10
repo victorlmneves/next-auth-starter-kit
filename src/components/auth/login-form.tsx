@@ -9,7 +9,12 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 
-export function LoginForm() {
+interface LoginFormProps {
+    enableGithub?: boolean
+    enableGoogle?: boolean
+}
+
+export function LoginForm({ enableGithub = false, enableGoogle = false }: LoginFormProps) {
     const searchParams = useSearchParams()
     const callbackUrl = searchParams.get('callbackUrl') ?? '/dashboard'
     const [isLoading, setIsLoading] = useState<string | null>(null)
@@ -18,7 +23,14 @@ export function LoginForm() {
         setIsLoading(provider)
 
         try {
-            await signIn(provider, { callbackUrl })
+            await signIn(
+                provider,
+                { callbackUrl },
+                {
+                    prompt: provider === 'google' ? 'consent' : 'signin',
+                    ...(provider === 'github' && { scope: 'read:user user:email' }),
+                },
+            )
         } catch {
             toast.error('Failed to sign in')
             setIsLoading(null)
@@ -50,7 +62,7 @@ export function LoginForm() {
                     Continue with Auth0
                 </Button>
 
-                {process.env.NEXT_PUBLIC_ENABLE_GITHUB_AUTH === 'true' && (
+                {enableGithub && (
                     <Button
                         variant="outline"
                         className="w-full"
@@ -64,7 +76,7 @@ export function LoginForm() {
                     </Button>
                 )}
 
-                {process.env.NEXT_PUBLIC_ENABLE_GOOGLE_AUTH === 'true' && (
+                {enableGoogle && (
                     <Button
                         variant="outline"
                         className="w-full"
