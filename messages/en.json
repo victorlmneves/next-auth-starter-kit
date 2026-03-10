@@ -68,7 +68,10 @@
         "analytics": "Analytics",
         "notifications": "Notifications",
         "documents": "Documents",
-        "documentation": "Documentation"
+        "documentation": "Documentation",
+        "userMenu": "User menu",
+        "toggleTheme": "Toggle theme",
+        "toggleMenu": "Toggle menu"
     },
     "dashboard": {
         "title": "Dashboard",

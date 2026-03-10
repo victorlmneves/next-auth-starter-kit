@@ -18,6 +18,7 @@ export function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const tNav = useTranslations('nav')
     const tAuth = useTranslations('auth')
+
     const navLinks = [
         { href: '/', label: tNav('home') },
         { href: '/docs', label: tNav('docs') },
@@ -54,7 +55,12 @@ export function Header() {
                 {/* Right Actions */}
                 <div className="flex items-center gap-2">
                     {/* Theme Toggle */}
-                    <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={toggleTheme}
+                        aria-label={tNav('toggleTheme')}
+                    >
                         <Sun className="h-4 w-4 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
                         <Moon className="absolute h-4 w-4 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
                     </Button>
@@ -65,10 +71,14 @@ export function Header() {
                     ) : session ? (
                         <div className="relative">
                             <button
+                                type="button"
                                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                                 className="flex items-center gap-2 rounded-full"
-                                aria-expanded={userMenuOpen}
+                                {...(userMenuOpen
+                                    ? { 'aria-expanded': 'true' }
+                                    : { 'aria-expanded': 'false' })}
                                 aria-haspopup="true"
+                                aria-label={tNav('userMenu')}
                             >
                                 <Avatar className="h-8 w-8">
                                     <AvatarImage
@@ -151,7 +161,7 @@ export function Header() {
                         size="icon"
                         className="md:hidden"
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        aria-label="Toggle menu"
+                        aria-label={tNav('toggleMenu')}
                     >
                         {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
                     </Button>

@@ -130,10 +130,10 @@ export default function SettingsPage() {
                         },
                     ].map((item) => (
                         <div key={item.id} className="flex items-center justify-between">
-                            <div>
+                            <label htmlFor={item.id} className="flex-1 cursor-pointer">
                                 <p className="text-sm font-medium">{item.label}</p>
                                 <p className="text-muted-foreground text-xs">{item.description}</p>
-                            </div>
+                            </label>
                             <input
                                 type="checkbox"
                                 id={item.id}
