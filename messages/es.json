@@ -54,7 +54,11 @@
         "checkEmailSpam": "¿No recibiste el correo? Revisa tu carpeta de spam o",
         "tryAgain": "inténtalo de nuevo",
         "backToSignIn": "Volver a inicio de sesión",
-        "getStarted": "Comenzar"
+        "getStarted": "Comenzar",
+        "signingOut": "Cerrando sesión...",
+        "signingOutRedirect": "Será redirigido para completar el cierre de sesión.",
+        "federatedLogoutPrompt": "Para cerrar sesión completamente, también debe cerrar sesión en su proveedor de identidad. Haga clic en el botón de abajo para abrir la ventana de cierre de sesión.",
+        "completeFederatedLogout": "Completar Cierre de Sesión"
     },
     "nav": {
         "home": "Inicio",

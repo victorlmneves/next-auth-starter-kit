@@ -54,7 +54,11 @@
         "checkEmailSpam": "Não recebeu o email? Verifique a pasta de spam ou",
         "tryAgain": "tente novamente",
         "backToSignIn": "Voltar para Entrar",
-        "getStarted": "Começar"
+        "getStarted": "Começar",
+        "signingOut": "A terminar sessão...",
+        "signingOutRedirect": "Será redirecionado para concluir o término de sessão.",
+        "federatedLogoutPrompt": "Para terminar sessão completamente, também precisa de sair do seu fornecedor de identidade. Clique no botão abaixo para abrir a janela de saída.",
+        "completeFederatedLogout": "Concluir Término de Sessão"
     },
     "nav": {
         "home": "Início",

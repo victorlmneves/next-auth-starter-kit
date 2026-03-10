@@ -1,10 +1,9 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { logoutAction } from '@/actions/auth'
 import type { AuthSession, AuthUser } from '@/types'
 
 export function useAuthentication() {
@@ -51,52 +50,8 @@ export function useAuthentication() {
         }
     }
 
-    const logout = async () => {
-        try {
-            // Revoke federated tokens server-side, get logout URL if provider supports it
-            const { federatedLogoutUrl } = await logoutAction()
-
-            if (federatedLogoutUrl) {
-                // Open a real visible popup — user must interact (e.g. GitHub logout button)
-                const w = 600,
-                    h = 700
-                const left = window.screenX + (window.outerWidth - w) / 2
-                const top = window.screenY + (window.outerHeight - h) / 2
-                const popup = window.open(
-                    federatedLogoutUrl,
-                    'auth-logout',
-                    `width=${w},height=${h},top=${top},left=${left},toolbar=no,menubar=no,scrollbars=yes`,
-                )
-
-                if (!popup) {
-                    // Popup was blocked — fall back to full redirect
-                    await signOut({ redirectTo: '/login' })
-
-                    return
-                }
-
-                // Wait for the user to close the popup, then clear local session
-                await new Promise<void>((resolve) => {
-                    const poll = setInterval(() => {
-                        if (popup.closed) {
-                            clearInterval(poll)
-                            resolve()
-                        }
-                    }, 500)
-                })
-            }
-
-            // Clear local NextAuth session and navigate to login
-            await signOut({ redirect: false })
-            router.push('/login')
-        } catch (error) {
-            if ((error as { digest?: string })?.digest?.startsWith('NEXT_REDIRECT')) {
-                throw error
-            }
-
-            console.error('Logout error:', error)
-            toast.error('Ocorreu um erro ao terminar sessão')
-        }
+    const logout = () => {
+        router.push('/logout')
     }
 
     const refreshSession = async (): Promise<boolean> => {

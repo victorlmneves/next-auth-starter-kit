@@ -54,7 +54,11 @@
         "checkEmailSpam": "Keine E-Mail erhalten? Prüfe deinen Spam-Ordner oder",
         "tryAgain": "versuche es erneut",
         "backToSignIn": "Zurück zur Anmeldung",
-        "getStarted": "Loslegen"
+        "getStarted": "Loslegen",
+        "signingOut": "Abmeldung läuft...",
+        "signingOutRedirect": "Sie werden weitergeleitet, um die Abmeldung abzuschließen.",
+        "federatedLogoutPrompt": "Um sich vollständig abzumelden, müssen Sie sich auch bei Ihrem Identitätsanbieter abmelden. Klicken Sie auf die Schaltfläche unten, um das Abmeldefenster zu öffnen.",
+        "completeFederatedLogout": "Abmeldung abschließen"
     },
     "nav": {
         "home": "Startseite",

@@ -54,7 +54,11 @@
         "checkEmailSpam": "Vous n'avez pas reçu l'e-mail ? Vérifiez vos spams ou",
         "tryAgain": "réessayez",
         "backToSignIn": "Retour à la connexion",
-        "getStarted": "Commencer"
+        "getStarted": "Commencer",
+        "signingOut": "Déconnexion en cours...",
+        "signingOutRedirect": "Vous serez redirigé pour terminer la déconnexion.",
+        "federatedLogoutPrompt": "Pour vous déconnecter complètement, vous devez également vous déconnecter de votre fournisseur d'identité. Cliquez sur le bouton ci-dessous pour ouvrir la fenêtre de déconnexion.",
+        "completeFederatedLogout": "Terminer la Déconnexion"
     },
     "nav": {
         "home": "Accueil",
