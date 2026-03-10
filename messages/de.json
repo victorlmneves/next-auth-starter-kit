@@ -57,8 +57,10 @@
         "getStarted": "Loslegen",
         "signingOut": "Abmeldung läuft...",
         "signingOutRedirect": "Sie werden weitergeleitet, um die Abmeldung abzuschließen.",
-        "federatedLogoutPrompt": "Um sich vollständig abzumelden, müssen Sie sich auch bei Ihrem Identitätsanbieter abmelden. Klicken Sie auf die Schaltfläche unten, um das Abmeldefenster zu öffnen.",
-        "completeFederatedLogout": "Abmeldung abschließen"
+        "federatedLogoutPrompt": "Um sich vollständig abzumelden, müssen Sie sich auch bei Ihrem Identitätsanbieter abmelden. Ein neues Fenster wird geöffnet — schließen Sie es nach der Abmeldung einfach, um zur App zurückzukehren.",
+        "completeFederatedLogout": "Abmeldung abschließen",
+        "federatedLogoutTitle": "Beim Anbieter abmelden",
+        "federatedLogoutDone": "Ich habe mich abgemeldet — Fenster schließen"
     },
     "nav": {
         "home": "Startseite",

@@ -57,8 +57,10 @@
         "getStarted": "Comenzar",
         "signingOut": "Cerrando sesión...",
         "signingOutRedirect": "Será redirigido para completar el cierre de sesión.",
-        "federatedLogoutPrompt": "Para cerrar sesión completamente, también debe cerrar sesión en su proveedor de identidad. Haga clic en el botón de abajo para abrir la ventana de cierre de sesión.",
-        "completeFederatedLogout": "Completar Cierre de Sesión"
+        "federatedLogoutPrompt": "Para cerrar sesión completamente, también debe cerrar sesión en su proveedor de identidad. Se abrirá una nueva ventana — después de cerrar sesión allí, simplemente ciérrela para volver a la aplicación.",
+        "completeFederatedLogout": "Completar Cierre de Sesión",
+        "federatedLogoutTitle": "Cerrar Sesión en el Proveedor",
+        "federatedLogoutDone": "He cerrado sesión — cerrar esta ventana"
     },
     "nav": {
         "home": "Inicio",

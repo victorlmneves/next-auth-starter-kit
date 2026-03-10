@@ -44,7 +44,7 @@ export default function LogoutPage() {
             return
         }
 
-        // Wait for the user to close the popup, then clear local session
+        // Wait for the user to close the popup/tab, then clear local session
         await new Promise<void>((resolve) => {
             const poll = setInterval(() => {
                 if (popup.closed) {

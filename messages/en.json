@@ -57,8 +57,10 @@
         "getStarted": "Get Started",
         "signingOut": "Signing you out...",
         "signingOutRedirect": "You will be redirected to complete sign out.",
-        "federatedLogoutPrompt": "To fully sign out, you also need to sign out from your identity provider. Click the button below to open the sign out window.",
-        "completeFederatedLogout": "Complete Sign Out"
+        "federatedLogoutPrompt": "To fully sign out, you need to also sign out from your identity provider. A new window will open — after signing out there, simply close it to return to the app.",
+        "completeFederatedLogout": "Complete Sign Out",
+        "federatedLogoutTitle": "Sign Out from Provider",
+        "federatedLogoutDone": "I've signed out — close this window"
     },
     "nav": {
         "home": "Home",

@@ -57,8 +57,10 @@
         "getStarted": "Commencer",
         "signingOut": "Déconnexion en cours...",
         "signingOutRedirect": "Vous serez redirigé pour terminer la déconnexion.",
-        "federatedLogoutPrompt": "Pour vous déconnecter complètement, vous devez également vous déconnecter de votre fournisseur d'identité. Cliquez sur le bouton ci-dessous pour ouvrir la fenêtre de déconnexion.",
-        "completeFederatedLogout": "Terminer la Déconnexion"
+        "federatedLogoutPrompt": "Pour vous déconnecter complètement, vous devez également vous déconnecter de votre fournisseur d'identité. Une nouvelle fenêtre s'ouvrira — après vous être déconnecté, fermez-la simplement pour revenir à l'application.",
+        "completeFederatedLogout": "Terminer la Déconnexion",
+        "federatedLogoutTitle": "Se déconnecter du fournisseur",
+        "federatedLogoutDone": "Je me suis déconnecté — fermer cette fenêtre"
     },
     "nav": {
         "home": "Accueil",

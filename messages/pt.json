@@ -57,8 +57,10 @@
         "getStarted": "Começar",
         "signingOut": "A terminar sessão...",
         "signingOutRedirect": "Será redirecionado para concluir o término de sessão.",
-        "federatedLogoutPrompt": "Para terminar sessão completamente, também precisa de sair do seu fornecedor de identidade. Clique no botão abaixo para abrir a janela de saída.",
-        "completeFederatedLogout": "Concluir Término de Sessão"
+        "federatedLogoutPrompt": "Para terminar sessão completamente, também precisa de sair do seu fornecedor de identidade. Será aberta uma nova janela — depois de terminar sessão lá, basta fechá-la para regressar à aplicação.",
+        "completeFederatedLogout": "Concluir Término de Sessão",
+        "federatedLogoutTitle": "Terminar Sessão no Fornecedor",
+        "federatedLogoutDone": "Terminei sessão — fechar esta janela"
     },
     "nav": {
         "home": "Início",
