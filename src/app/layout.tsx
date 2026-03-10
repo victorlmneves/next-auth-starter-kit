@@ -19,7 +19,7 @@ export const metadata: Metadata = {
         template: '%s | Next.js Auth Start Kit',
     },
     description:
-        'A production-ready SaaS starter kit built with Next.js 15, NextAuth.js v5, Tailwind CSS v4, and TypeScript. Includes authentication flows with Auth0.',
+        'A production-ready SaaS starter kit built with Next.js 16, NextAuth.js v5, Tailwind CSS v4, and TypeScript. Includes authentication flows with Auth0.',
     keywords: ['Next.js', 'Auth0', 'Authentication', 'SaaS', 'Starter Kit', 'TypeScript', 'Tailwind CSS'],
     authors: [{ name: 'Your Name' }],
     openGraph: {

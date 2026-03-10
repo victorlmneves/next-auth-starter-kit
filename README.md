@@ -36,7 +36,7 @@ A production-ready SaaS starter kit built with **Next.js 16**, **NextAuth.js v5*
 │   │   ├── layout.tsx           # Root layout (html/body shell)
 │   │   └── globals.css          # Global styles
 │   ├── auth.ts                  # NextAuth configuration (Auth0 + refresh tokens)
-│   ├── proxy.ts                 # Route protection + i18n (Next.js 16 proxy convention)
+│   ├── middleware.ts            # Route protection + i18n locale routing
 │   ├── components/
 │   │   ├── auth/                # Auth forms (login, register, forgot-password)
 │   │   ├── layout/              # Header, Sidebar
@@ -44,8 +44,9 @@ A production-ready SaaS starter kit built with **Next.js 16**, **NextAuth.js v5*
 │   ├── hooks/
 │   │   └── useAuthentication.ts # Auth composable (equivalent to Nuxt composable)
 │   ├── i18n/
-│   │   ├── routing.ts           # i18n locale configuration
-│   │   └── request.ts           # next-intl server config
+│   │   ├── routing.ts           # i18n locale configuration (locales, defaultLocale)
+│   │   ├── request.ts           # next-intl server config
+│   │   └── navigation.ts        # Locale-aware Link, useRouter, usePathname, redirect
 │   ├── lib/
 │   │   └── utils.ts             # Utility functions
 │   └── types/
@@ -127,9 +128,24 @@ const { user, isAuthenticated, isLoading, login, logout, accessToken } = useAuth
 
 ## 🌍 Internationalization
 
-Supports 5 languages out of the box. The locale is automatically detected and can be prefixed in the URL for non-default locales.
+Supports 5 languages out of the box using `next-intl`.
 
-Add translations to the `messages/` directory.
+| Locale | Language   |
+| ------ | ---------- |
+| `en`   | English (default — no URL prefix) |
+| `pt`   | Portuguese (`/pt/...`) |
+| `es`   | Spanish (`/es/...`) |
+| `fr`   | French (`/fr/...`) |
+| `de`   | German (`/de/...`) |
+
+- All translation keys live in `messages/<locale>.json`
+- Server components use `getTranslations` from `next-intl/server`
+- Client components use `useTranslations` from `next-intl`
+- Use locale-aware navigation from `@/i18n/navigation` (not `next/navigation`) to preserve the active locale on route changes:
+
+```typescript
+import { useRouter, usePathname, Link } from '@/i18n/navigation'
+```
 
 ## 🧪 Testing
 
@@ -152,20 +168,20 @@ npm run test:e2e:ui
 
 ## 🔄 Nuxt → Next.js Equivalency
 
-| Nuxt (Original)        | Next.js (This Kit)          |
-| ---------------------- | --------------------------- |
-| `@sidebase/nuxt-auth`  | `next-auth` v5              |
-| `Auth0` provider       | Auth0 provider (same)       |
-| Nuxt middleware        | Next.js proxy (`proxy.ts`)  |
-| `useAuthentication.ts` | `useAuthentication.ts` hook |
-| Pinia store            | Zustand store               |
-| `@nuxt/content`        | MDX / content directory     |
-| `@nuxt/fonts`          | `next/font`                 |
-| Nuxt i18n              | `next-intl`                 |
-| Vitest                 | Vitest (same)               |
-| Playwright             | Playwright (same)           |
-| Renovate               | Renovate (same)             |
-| GitHub Actions         | GitHub Actions (same)       |
+| Nuxt (Original)        | Next.js (This Kit)                   |
+| ---------------------- | ------------------------------------ |
+| `@sidebase/nuxt-auth`  | `next-auth` v5                       |
+| `Auth0` provider       | Auth0 provider (same)                |
+| Nuxt middleware        | Next.js Middleware (`middleware.ts`) |
+| `useAuthentication.ts` | `useAuthentication.ts` hook          |
+| Pinia store            | Zustand store                        |
+| `@nuxt/content`        | MDX / content directory              |
+| `@nuxt/fonts`          | `next/font`                          |
+| Nuxt i18n              | `next-intl`                          |
+| Vitest                 | Vitest (same)                        |
+| Playwright             | Playwright (same)                    |
+| Renovate               | Renovate (same)                      |
+| GitHub Actions         | GitHub Actions (same)                |
 
 ## 📄 License
 

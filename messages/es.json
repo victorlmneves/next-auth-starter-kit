@@ -139,7 +139,7 @@
         "support": "Soporte"
     },
     "home": {
-        "badge": "Listo para usar · Next.js 15 + NextAuth v5",
+        "badge": "Listo para usar · Next.js 16 + NextAuth v5",
         "heroTitle": "Next.js Auth",
         "heroTitleHighlight": "Start Kit",
         "heroDescription": "Un kit inicial SaaS listo para producción con Next.js 16, NextAuth.js v5, Auth0, Tailwind CSS v4 y TypeScript. Lanza más rápido con autenticación ya configurada.",
@@ -156,7 +156,7 @@
         "footerTerms": "Términos",
         "feature1Title": "Integración con Auth0",
         "feature1Description": "Flujos de autenticación prediseñados con Auth0, incluyendo login, registro y refresh tokens.",
-        "feature2Title": "Next.js 15 + Turbopack",
+        "feature2Title": "Next.js 16 + Turbopack",
         "feature2Description": "Construido sobre el último Next.js con App Router, Server Components y el velocísimo Turbopack.",
         "feature3Title": "Internacionalización",
         "feature3Description": "Soporte completo de i18n con next-intl. Compatible con inglés, portugués, español, francés y alemán.",

@@ -1,7 +1,7 @@
 {
     "name": "next-auth-start-kit",
     "version": "1.0.0",
-    "description": "A production-ready SaaS starter kit built with Next.js 15, NextAuth.js v5, Tailwind CSS v4, and TypeScript. Includes authentication flows with Auth0, enterprise features, and a beautiful design system.",
+    "description": "A production-ready SaaS starter kit built with Next.js 16, NextAuth.js v5, Tailwind CSS v4, and TypeScript. Includes authentication flows with Auth0, enterprise features, and a beautiful design system.",
     "private": true,
     "scripts": {
         "dev": "next dev --turbopack",
