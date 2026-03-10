@@ -4,11 +4,13 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { toast } from 'sonner'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 
 export function RegisterForm() {
     const [isLoading, setIsLoading] = useState(false)
+    const t = useTranslations('auth')
 
     const handleSignUp = async () => {
         setIsLoading(true)
@@ -24,8 +26,8 @@ export function RegisterForm() {
     return (
         <Card className="mx-auto w-full max-w-md">
             <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl font-bold tracking-tight">Create an account</CardTitle>
-                <CardDescription>Sign up through Auth0&apos;s secure registration</CardDescription>
+                <CardTitle className="text-2xl font-bold tracking-tight">{t('registerTitle')}</CardTitle>
+                <CardDescription>{t('registerDescription')}</CardDescription>
             </CardHeader>
 
             <CardContent>
@@ -36,18 +38,18 @@ export function RegisterForm() {
                             d="M21.98 7.448L19.62 0H4.347L2.02 7.448c-1.352 4.312.03 9.206 3.815 12.015L12.007 24l6.157-4.552c3.755-2.81 5.182-7.688 3.815-12.015"
                         />
                     </svg>
-                    Sign up with Auth0
+                    {t('signUpWith', { provider: 'Auth0' })}
                 </Button>
             </CardContent>
 
             <CardFooter className="flex justify-center">
                 <p className="text-muted-foreground text-sm">
-                    Already have an account?{' '}
+                    {t('hasAccount')}{' '}
                     <Link
                         href="/login"
                         className="text-primary hover:text-primary/80 font-medium transition-colors"
                     >
-                        Sign in
+                        {t('login')}
                     </Link>
                 </p>
             </CardFooter>

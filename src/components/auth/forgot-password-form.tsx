@@ -7,6 +7,7 @@ import { z } from 'zod'
 import Link from 'next/link'
 import { Mail, ArrowLeft } from 'lucide-react'
 import { toast } from 'sonner'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -20,6 +21,7 @@ type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>
 export function ForgotPasswordForm() {
     const [isLoading, setIsLoading] = useState(false)
     const [emailSent, setEmailSent] = useState(false)
+    const t = useTranslations('auth')
 
     const {
         register,
@@ -58,26 +60,24 @@ export function ForgotPasswordForm() {
                     <div className="bg-primary/10 mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
                         <Mail className="text-primary h-8 w-8" />
                     </div>
-                    <CardTitle className="text-2xl font-bold tracking-tight">Check your email</CardTitle>
-                    <CardDescription>
-                        We sent a password reset link to <strong>{getValues('email')}</strong>
-                    </CardDescription>
+                    <CardTitle className="text-2xl font-bold tracking-tight">{t('checkEmail')}</CardTitle>
+                    <CardDescription>{t('checkEmailSent', { email: getValues('email') })}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4 text-center">
                     <p className="text-muted-foreground text-sm">
-                        Didn&apos;t receive the email? Check your spam folder or{' '}
+                        {t('checkEmailSpam')}{' '}
                         <button
                             onClick={() => setEmailSent(false)}
                             className="text-primary font-medium hover:underline"
                         >
-                            try again
+                            {t('tryAgain')}
                         </button>
                         .
                     </p>
                     <Link href="/login">
                         <Button variant="outline" className="w-full">
                             <ArrowLeft className="h-4 w-4" />
-                            Back to Sign In
+                            {t('backToSignIn')}
                         </Button>
                     </Link>
                 </CardContent>
@@ -88,10 +88,10 @@ export function ForgotPasswordForm() {
     return (
         <Card className="mx-auto w-full max-w-md">
             <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl font-bold tracking-tight">Forgot password?</CardTitle>
-                <CardDescription>
-                    Enter your email address and we&apos;ll send you a password reset link.
-                </CardDescription>
+                <CardTitle className="text-2xl font-bold tracking-tight">
+                    {t('forgotPasswordTitle')}
+                </CardTitle>
+                <CardDescription>{t('forgotPasswordDescription')}</CardDescription>
             </CardHeader>
 
             <CardContent>
@@ -99,8 +99,8 @@ export function ForgotPasswordForm() {
                     <Input
                         {...register('email')}
                         type="email"
-                        label="Email"
-                        placeholder="you@example.com"
+                        label={t('email')}
+                        placeholder={t('emailPlaceholder')}
                         error={errors.email?.message}
                         leftIcon={<Mail className="h-4 w-4" />}
                         autoComplete="email"
@@ -108,13 +108,13 @@ export function ForgotPasswordForm() {
                     />
 
                     <Button type="submit" className="w-full" size="lg" loading={isLoading}>
-                        Send Reset Link
+                        {t('sendResetLink')}
                     </Button>
 
                     <Link href="/login">
                         <Button variant="ghost" className="w-full">
                             <ArrowLeft className="h-4 w-4" />
-                            Back to Sign In
+                            {t('backToSignIn')}
                         </Button>
                     </Link>
                 </form>

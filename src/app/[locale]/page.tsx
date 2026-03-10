@@ -1,45 +1,21 @@
 import Link from 'next/link'
 import { ArrowRight, Shield, Zap, Globe, Code2, TestTube, Moon } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
 import { Button } from '@/components/ui/button'
 import { Header } from '@/components/layout/header'
 
-const features = [
-    {
-        icon: Shield,
-        title: 'Auth0 Integration',
-        description:
-            'Pre-built authentication flows with Auth0, including login, signup, and refresh tokens.',
-    },
-    {
-        icon: Zap,
-        title: 'Next.js 15 + Turbopack',
-        description:
-            'Built on the latest Next.js with App Router, Server Components, and blazing fast Turbopack.',
-    },
-    {
-        icon: Globe,
-        title: 'Internationalization',
-        description:
-            'Full i18n support with next-intl. Supports English, Portuguese, Spanish, French, and German.',
-    },
-    {
-        icon: Code2,
-        title: 'TypeScript First',
-        description: 'Full type safety with strict TypeScript, including typed API routes and session data.',
-    },
-    {
-        icon: Moon,
-        title: 'Dark Mode',
-        description: 'Automatic theme switching with next-themes. Respects system preferences.',
-    },
-    {
-        icon: TestTube,
-        title: 'Testing Suite',
-        description: 'Unit/component tests with Vitest + Testing Library, E2E tests with Playwright.',
-    },
-]
+export default async function HomePage() {
+    const t = await getTranslations('home')
 
-export default function HomePage() {
+    const features = [
+        { icon: Shield, title: t('feature1Title'), description: t('feature1Description') },
+        { icon: Zap, title: t('feature2Title'), description: t('feature2Description') },
+        { icon: Globe, title: t('feature3Title'), description: t('feature3Description') },
+        { icon: Code2, title: t('feature4Title'), description: t('feature4Description') },
+        { icon: Moon, title: t('feature5Title'), description: t('feature5Description') },
+        { icon: TestTube, title: t('feature6Title'), description: t('feature6Description') },
+    ]
+
     return (
         <div className="flex min-h-screen flex-col">
             <Header />
@@ -66,25 +42,24 @@ export default function HomePage() {
                                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
                                 <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
                             </span>
-                            Ready to use · Next.js 15 + NextAuth v5
+                            {t('badge')}
                         </div>
 
                         <h1 className="mb-6 text-5xl font-bold tracking-tight text-balance sm:text-6xl lg:text-7xl">
-                            Next.js Auth{' '}
+                            {t('heroTitle')}{' '}
                             <span className="from-primary to-primary/50 bg-gradient-to-r bg-clip-text text-transparent">
-                                Start Kit
+                                {t('heroTitleHighlight')}
                             </span>
                         </h1>
 
                         <p className="text-muted-foreground mx-auto mb-10 max-w-2xl text-xl text-balance">
-                            A production-ready SaaS starter kit with Next.js 15, NextAuth.js v5, Auth0,
-                            Tailwind CSS v4, and TypeScript. Ship faster with authentication already set up.
+                            {t('heroDescription')}
                         </p>
 
                         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
                             <Link href="/register">
                                 <Button size="xl" className="gap-2">
-                                    Get Started Free
+                                    {t('getStartedFree')}
                                     <ArrowRight className="h-4 w-4" />
                                 </Button>
                             </Link>
@@ -102,7 +77,7 @@ export default function HomePage() {
                                     >
                                         <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
                                     </svg>
-                                    View on GitHub
+                                    {t('viewOnGitHub')}
                                 </Button>
                             </a>
                         </div>
@@ -110,7 +85,7 @@ export default function HomePage() {
                         {/* Tech Stack */}
                         <div className="text-muted-foreground/60 mt-16 flex flex-wrap items-center justify-center gap-8">
                             {[
-                                'Next.js 15',
+                                'Next.js 16',
                                 'NextAuth v5',
                                 'Auth0',
                                 'Tailwind CSS v4',
@@ -131,11 +106,10 @@ export default function HomePage() {
                     <div className="container mx-auto px-4">
                         <div className="mb-16 text-center">
                             <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
-                                Everything you need to ship
+                                {t('featuresTitle')}
                             </h2>
                             <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
-                                Stop reinventing the wheel. Start with a solid foundation and focus on what
-                                makes your product unique.
+                                {t('featuresSubtitle')}
                             </p>
                         </div>
 
@@ -165,14 +139,12 @@ export default function HomePage() {
                 <section className="bg-muted/30 border-t py-24">
                     <div className="container mx-auto px-4 text-center">
                         <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
-                            Ready to get started?
+                            {t('ctaTitle')}
                         </h2>
-                        <p className="text-muted-foreground mb-8 text-lg">
-                            Join developers building with the Next.js Auth Start Kit.
-                        </p>
+                        <p className="text-muted-foreground mb-8 text-lg">{t('ctaSubtitle')}</p>
                         <Link href="/register">
                             <Button size="xl">
-                                Start Building Today
+                                {t('startBuilding')}
                                 <ArrowRight className="h-4 w-4" />
                             </Button>
                         </Link>
@@ -186,13 +158,13 @@ export default function HomePage() {
                     <p>© {new Date().getFullYear()} Next.js Auth Start Kit. MIT License.</p>
                     <div className="flex gap-4">
                         <Link href="/docs" className="hover:text-foreground transition-colors">
-                            Docs
+                            {t('footerDocs')}
                         </Link>
                         <Link href="/privacy" className="hover:text-foreground transition-colors">
-                            Privacy
+                            {t('footerPrivacy')}
                         </Link>
                         <Link href="/terms" className="hover:text-foreground transition-colors">
-                            Terms
+                            {t('footerTerms')}
                         </Link>
                     </div>
                 </div>

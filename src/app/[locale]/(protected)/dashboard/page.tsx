@@ -1,4 +1,5 @@
 import { auth } from '@/auth'
+import { getTranslations } from 'next-intl/server'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users, TrendingUp, Activity, DollarSign } from 'lucide-react'
 import type { Metadata } from 'next'
@@ -52,17 +53,16 @@ const recentActivity = [
 
 export default async function DashboardPage() {
     const session = await auth()
+    const t = await getTranslations('dashboard')
 
     return (
         <div className="space-y-6">
             {/* Page Header */}
             <div>
                 <h1 className="text-2xl font-bold tracking-tight">
-                    Welcome back, {session?.user?.name?.split(' ')[0] ?? 'there'}!
+                    {t('welcome', { name: session?.user?.name?.split(' ')[0] ?? 'there' })}
                 </h1>
-                <p className="text-muted-foreground">
-                    Here&apos;s what&apos;s happening with your account today.
-                </p>
+                <p className="text-muted-foreground">{t('subtitle')}</p>
             </div>
 
             {/* Stats Grid */}
@@ -94,7 +94,7 @@ export default async function DashboardPage() {
                 {/* Recent Activity */}
                 <Card className="lg:col-span-4">
                     <CardHeader>
-                        <CardTitle>Recent Activity</CardTitle>
+                        <CardTitle>{t('recentActivity')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
@@ -117,7 +117,7 @@ export default async function DashboardPage() {
                 {/* Session Info */}
                 <Card className="lg:col-span-3">
                     <CardHeader>
-                        <CardTitle>Current Session</CardTitle>
+                        <CardTitle>{t('currentSession')}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="bg-muted/50 space-y-3 rounded-lg p-4">
@@ -144,7 +144,7 @@ export default async function DashboardPage() {
                             {session?.error && (
                                 <div className="bg-destructive/10 rounded-lg p-3">
                                     <p className="text-destructive text-xs font-medium">
-                                        ⚠️ Token refresh error — please sign in again
+                                        ⚠️ {t('tokenError')}
                                     </p>
                                 </div>
                             )}

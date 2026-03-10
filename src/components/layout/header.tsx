@@ -1,28 +1,29 @@
 'use client'
 
-import Link from 'next/link'
-import { useAuthentication } from '@/hooks/useAuthentication'
-import { Moon, Sun, Menu, X, User, Settings, LogOut, LayoutDashboard } from 'lucide-react'
-import { useTheme } from 'next-themes'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
+import { useTheme } from 'next-themes'
+import Link from 'next/link'
+import { Moon, Sun, Menu, X, User, Settings, LogOut, LayoutDashboard } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useAuthentication } from '@/hooks/useAuthentication'
 import { getInitials } from '@/lib/utils'
-
-const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/docs', label: 'Docs' },
-    { href: '/blog', label: 'Blog' },
-    { href: '/pricing', label: 'Pricing' },
-]
 
 export function Header() {
     const { session, isLoading: loading, logout } = useAuthentication()
     const status = loading ? 'loading' : session ? 'authenticated' : 'unauthenticated'
     const { theme, setTheme } = useTheme()
     const [userMenuOpen, setUserMenuOpen] = useState(false)
-
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const tNav = useTranslations('nav')
+    const tAuth = useTranslations('auth')
+    const navLinks = [
+        { href: '/', label: tNav('home') },
+        { href: '/docs', label: tNav('docs') },
+        { href: '/blog', label: tNav('blog') },
+        { href: '/pricing', label: tNav('pricing') },
+    ]
 
     const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark')
 
@@ -100,7 +101,7 @@ export function Header() {
                                             onClick={() => setUserMenuOpen(false)}
                                         >
                                             <LayoutDashboard className="h-4 w-4" />
-                                            Dashboard
+                                            {tNav('dashboard')}
                                         </Link>
                                         <Link
                                             href="/profile"
@@ -108,7 +109,7 @@ export function Header() {
                                             onClick={() => setUserMenuOpen(false)}
                                         >
                                             <User className="h-4 w-4" />
-                                            Profile
+                                            {tNav('profile')}
                                         </Link>
                                         <Link
                                             href="/settings"
@@ -116,7 +117,7 @@ export function Header() {
                                             onClick={() => setUserMenuOpen(false)}
                                         >
                                             <Settings className="h-4 w-4" />
-                                            Settings
+                                            {tNav('settings')}
                                         </Link>
                                         <div className="mt-1 border-t pt-1">
                                             <button
@@ -124,7 +125,7 @@ export function Header() {
                                                 className="text-destructive hover:bg-destructive/10 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors"
                                             >
                                                 <LogOut className="h-4 w-4" />
-                                                Sign Out
+                                                {tAuth('logout')}
                                             </button>
                                         </div>
                                     </div>
@@ -135,11 +136,11 @@ export function Header() {
                         <div className="flex items-center gap-2">
                             <Link href="/login">
                                 <Button variant="ghost" size="sm">
-                                    Sign In
+                                    {tAuth('login')}
                                 </Button>
                             </Link>
                             <Link href="/register">
-                                <Button size="sm">Get Started</Button>
+                                <Button size="sm">{tAuth('getStarted')}</Button>
                             </Link>
                         </div>
                     )}

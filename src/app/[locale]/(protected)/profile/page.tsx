@@ -1,4 +1,5 @@
 import { auth } from '@/auth'
+import { getTranslations } from 'next-intl/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -12,21 +13,20 @@ export const metadata: Metadata = {
 export default async function ProfilePage() {
     const session = await auth()
     const user = session?.user
+    const t = await getTranslations('profile')
 
     return (
         <div className="max-w-2xl space-y-6">
             <div>
-                <h1 className="text-2xl font-bold tracking-tight">Profile</h1>
-                <p className="text-muted-foreground">
-                    Manage your personal information and account settings.
-                </p>
+                <h1 className="text-2xl font-bold tracking-tight">{t('title')}</h1>
+                <p className="text-muted-foreground">{t('subtitle')}</p>
             </div>
 
             {/* Profile Card */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Personal Information</CardTitle>
-                    <CardDescription>Your public profile information</CardDescription>
+                    <CardTitle>{t('personalInfo')}</CardTitle>
+                    <CardDescription>{t('publicProfile')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     {/* Avatar */}
@@ -41,7 +41,7 @@ export default async function ProfilePage() {
                             <h3 className="text-lg font-semibold">{user?.name}</h3>
                             <p className="text-muted-foreground text-sm">{user?.email}</p>
                             <Button variant="outline" size="sm" className="mt-2">
-                                Change Photo
+                                {t('changePhoto')}
                             </Button>
                         </div>
                     </div>
@@ -49,25 +49,25 @@ export default async function ProfilePage() {
                     {/* Form Fields */}
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div className="space-y-1.5">
-                            <label className="text-sm font-medium">Full Name</label>
+                            <label className="text-sm font-medium">{t('fullName')}</label>
                             <div className="bg-muted/50 rounded-lg border px-3 py-2 text-sm">
                                 {user?.name ?? '—'}
                             </div>
                         </div>
                         <div className="space-y-1.5">
-                            <label className="text-sm font-medium">Email</label>
+                            <label className="text-sm font-medium">{t('email')}</label>
                             <div className="bg-muted/50 rounded-lg border px-3 py-2 text-sm">
                                 {user?.email ?? '—'}
                             </div>
                         </div>
                         <div className="space-y-1.5">
-                            <label className="text-sm font-medium">User ID</label>
+                            <label className="text-sm font-medium">{t('userId')}</label>
                             <div className="bg-muted/50 rounded-lg border px-3 py-2 font-mono text-sm text-xs break-all">
                                 {user?.id ?? '—'}
                             </div>
                         </div>
                         <div className="space-y-1.5">
-                            <label className="text-sm font-medium">Role</label>
+                            <label className="text-sm font-medium">{t('role')}</label>
                             <div className="bg-muted/50 rounded-lg border px-3 py-2 text-sm">
                                 <span className="bg-primary/10 text-primary inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium">
                                     {user?.role ?? 'user'}
@@ -77,8 +77,8 @@ export default async function ProfilePage() {
                     </div>
 
                     <div className="flex gap-3 pt-2">
-                        <Button>Save Changes</Button>
-                        <Button variant="outline">Cancel</Button>
+                        <Button>{t('saveChanges')}</Button>
+                        <Button variant="outline">{t('cancel')}</Button>
                     </div>
                 </CardContent>
             </Card>
@@ -86,19 +86,19 @@ export default async function ProfilePage() {
             {/* Danger Zone */}
             <Card className="border-destructive/50">
                 <CardHeader>
-                    <CardTitle className="text-destructive">Danger Zone</CardTitle>
-                    <CardDescription>Irreversible and destructive actions</CardDescription>
+                    <CardTitle className="text-destructive">{t('dangerZone')}</CardTitle>
+                    <CardDescription>{t('irreversibleActions')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="border-destructive/50 flex items-center justify-between rounded-lg border p-4">
                         <div>
-                            <p className="text-sm font-medium">Delete Account</p>
+                            <p className="text-sm font-medium">{t('deleteAccount')}</p>
                             <p className="text-muted-foreground mt-0.5 text-xs">
-                                Permanently delete your account and all associated data.
+                                {t('deleteAccountDescription')}
                             </p>
                         </div>
                         <Button variant="destructive" size="sm">
-                            Delete Account
+                            {t('deleteAccount')}
                         </Button>
                     </div>
                 </CardContent>

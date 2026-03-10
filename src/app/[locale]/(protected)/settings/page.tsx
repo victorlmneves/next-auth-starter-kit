@@ -1,16 +1,13 @@
 'use client'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { useState } from 'react'
 import { Moon, Sun, Monitor, Globe } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import { useRouter, usePathname } from '@/i18n/navigation'
+import { useLocale, useTranslations } from 'next-intl'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-
-const themeOptions = [
-    { value: 'light', label: 'Light', icon: Sun },
-    { value: 'dark', label: 'Dark', icon: Moon },
-    { value: 'system', label: 'System', icon: Monitor },
-] as const
 
 const languageOptions = [
     { value: 'en', label: 'English' },
@@ -22,23 +19,37 @@ const languageOptions = [
 
 export default function SettingsPage() {
     const { theme, setTheme } = useTheme()
+    const locale = useLocale()
+    const router = useRouter()
+    const pathname = usePathname()
+    const [selectedLocale, setSelectedLocale] = useState(locale)
+    const t = useTranslations('settings')
+    const themeOptions = [
+        { value: 'light', label: t('light'), icon: Sun },
+        { value: 'dark', label: t('dark'), icon: Moon },
+        { value: 'system', label: t('system'), icon: Monitor },
+    ]
+
+    const saveLanguage = () => {
+        router.push(pathname, { locale: selectedLocale })
+    }
 
     return (
         <div className="max-w-2xl space-y-6">
             <div>
-                <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
-                <p className="text-muted-foreground">Manage your application preferences.</p>
+                <h1 className="text-2xl font-bold tracking-tight">{t('title')}</h1>
+                <p className="text-muted-foreground">{t('subtitle')}</p>
             </div>
 
             {/* Appearance */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Appearance</CardTitle>
-                    <CardDescription>Customize how the application looks and feels</CardDescription>
+                    <CardTitle>{t('appearance')}</CardTitle>
+                    <CardDescription>{t('appearanceDescription')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div>
-                        <label className="mb-3 block text-sm font-medium">Theme</label>
+                        <label className="mb-3 block text-sm font-medium">{t('theme')}</label>
                         <div className="grid grid-cols-3 gap-3">
                             {themeOptions.map((option) => {
                                 const Icon = option.icon
@@ -66,16 +77,21 @@ export default function SettingsPage() {
             {/* Language */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Language & Region</CardTitle>
-                    <CardDescription>Set your preferred language</CardDescription>
+                    <CardTitle>{t('languageRegion')}</CardTitle>
+                    <CardDescription>{t('languageRegionDescription')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-1.5">
                         <label className="flex items-center gap-2 text-sm font-medium">
                             <Globe className="h-4 w-4" />
-                            Language
+                            {t('language')}
                         </label>
-                        <select className="border-input focus-visible:ring-ring flex h-9 w-full rounded-lg border bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:ring-2 focus-visible:outline-none">
+                        <select
+                            value={selectedLocale}
+                            onChange={(e) => setSelectedLocale(e.target.value)}
+                            aria-label="Language"
+                            className="border-input focus-visible:ring-ring flex h-9 w-full rounded-lg border bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:ring-2 focus-visible:outline-none"
+                        >
                             {languageOptions.map((lang) => (
                                 <option key={lang.value} value={lang.value}>
                                     {lang.label}
@@ -83,32 +99,34 @@ export default function SettingsPage() {
                             ))}
                         </select>
                     </div>
-                    <Button className="mt-4">Save Preferences</Button>
+                    <Button className="mt-4" onClick={saveLanguage}>
+                        {t('savePreferences')}
+                    </Button>
                 </CardContent>
             </Card>
 
             {/* Notifications */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Notifications</CardTitle>
-                    <CardDescription>Configure your notification preferences</CardDescription>
+                    <CardTitle>{t('notifications')}</CardTitle>
+                    <CardDescription>{t('notificationsDescription')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     {[
                         {
                             id: 'email',
-                            label: 'Email notifications',
-                            description: 'Receive updates via email',
+                            label: t('emailNotifications'),
+                            description: t('emailNotificationsDescription'),
                         },
                         {
                             id: 'security',
-                            label: 'Security alerts',
-                            description: 'Get notified of suspicious activity',
+                            label: t('securityAlerts'),
+                            description: t('securityAlertsDescription'),
                         },
                         {
                             id: 'updates',
-                            label: 'Product updates',
-                            description: 'Hear about new features and improvements',
+                            label: t('productUpdates'),
+                            description: t('productUpdatesDescription'),
                         },
                     ].map((item) => (
                         <div key={item.id} className="flex items-center justify-between">
@@ -124,7 +142,7 @@ export default function SettingsPage() {
                             />
                         </div>
                     ))}
-                    <Button className="mt-2">Save Notifications</Button>
+                    <Button className="mt-2">{t('saveNotifications')}</Button>
                 </CardContent>
             </Card>
         </div>

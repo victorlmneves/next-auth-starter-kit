@@ -5,33 +5,74 @@ import { usePathname } from 'next/navigation'
 import { LayoutDashboard, User, Settings, FileText, BarChart3, Bell, HelpCircle, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuthentication } from '@/hooks/useAuthentication'
-
-const sidebarItems = [
-    {
-        title: 'Main',
-        items: [
-            { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-            { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
-            { href: '/dashboard/notifications', label: 'Notifications', icon: Bell, badge: '3' },
-            { href: '/dashboard/documents', label: 'Documents', icon: FileText },
-        ],
-    },
-    {
-        title: 'Account',
-        items: [
-            { href: '/profile', label: 'Profile', icon: User },
-            { href: '/settings', label: 'Settings', icon: Settings },
-        ],
-    },
-    {
-        title: 'Support',
-        items: [{ href: '/docs', label: 'Documentation', icon: HelpCircle }],
-    },
-]
+import { useTranslations } from 'next-intl'
 
 export function Sidebar() {
     const pathname = usePathname()
     const { logout } = useAuthentication()
+    const tNav = useTranslations('nav')
+    const tAuth = useTranslations('auth')
+    const tSidebar = useTranslations('sidebar')
+
+    const sidebarItems = [
+        {
+            title: tSidebar('main'),
+            items: [
+                {
+                    href: '/dashboard',
+                    label: tNav('dashboard'),
+                    icon: LayoutDashboard,
+                    badge: undefined as string | undefined,
+                },
+                {
+                    href: '/dashboard/analytics',
+                    label: tNav('analytics'),
+                    icon: BarChart3,
+                    badge: undefined as string | undefined,
+                },
+                {
+                    href: '/dashboard/notifications',
+                    label: tNav('notifications'),
+                    icon: Bell,
+                    badge: '3' as string | undefined,
+                },
+                {
+                    href: '/dashboard/documents',
+                    label: tNav('documents'),
+                    icon: FileText,
+                    badge: undefined as string | undefined,
+                },
+            ],
+        },
+        {
+            title: tSidebar('account'),
+            items: [
+                {
+                    href: '/profile',
+                    label: tNav('profile'),
+                    icon: User,
+                    badge: undefined as string | undefined,
+                },
+                {
+                    href: '/settings',
+                    label: tNav('settings'),
+                    icon: Settings,
+                    badge: undefined as string | undefined,
+                },
+            ],
+        },
+        {
+            title: tSidebar('support'),
+            items: [
+                {
+                    href: '/docs',
+                    label: tNav('documentation'),
+                    icon: HelpCircle,
+                    badge: undefined as string | undefined,
+                },
+            ],
+        },
+    ]
 
     return (
         <aside className="bg-background flex h-full w-64 flex-col border-r">
@@ -99,7 +140,7 @@ export function Sidebar() {
                     className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
                 >
                     <LogOut className="h-4 w-4 shrink-0" />
-                    Sign Out
+                    {tAuth('logout')}
                 </button>
             </div>
         </aside>
